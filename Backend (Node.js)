@@ -1,0 +1,90 @@
+
+Esqueleto de archivos y contenido de ejemplo:
+* Backend/app.js (Usando Express)
+<!-- end list -->
+const express = require('express');
+const cors = require('cors'); // Si necesitas habilitar CORS
+const authRoutes = require('./routes/authRoutes');
+const salonRoutes = require('./routes/salonRoutes');
+// ... Importa otras rutas
+
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+app.use(cors()); // Habilita CORS si es necesario
+app.use(express.json()); // Para parsear el body de las peticiones
+
+app.use('/auth', authRoutes);
+app.use('/salons', salonRoutes);
+// ... Usa otras rutas
+
+app.get('/', (req, res) => {
+res.send('¡API de BeautyPass funcionando!');
+});
+
+app.listen(PORT, () => {
+console.log(`Servidor corriendo en el puerto ${PORT}`);
+});
+
+* Backend/routes/authRoutes.js
+<!-- end list -->
+const express = require('express');
+const router = express.Router();
+const authController = require('../controllers/authController');
+
+router.post('/register', authController.register);
+router.post('/login', authController.login);
+// ... Define otras rutas de autenticación
+
+module.exports = router;
+
+* Backend/controllers/authController.js
+<!-- end list -->
+// Ejemplo simplificado (necesitarás lógica de base de datos, etc.)
+const register = (req, res) => {
+// Lógica para registrar un usuario
+res.json({ message: 'Usuario registrado' });
+};
+
+const login = (req, res) => {
+// Lógica para iniciar sesión
+res.json({ message: 'Usuario autenticado' });
+};
+
+module.exports = { register, login };
+
+* Backend/models/User.js (Ejemplo con Mongoose para MongoDB)
+<!-- end list -->
+const mongoose = require('mongoose');
+
+const userSchema = new mongoose.Schema({
+email: { type: String, required: true, unique: true },
+password: { type: String, required: true },
+name: { type: String, required: true },
+// ... Otros campos del usuario
+});
+
+module.exports = mongoose.model('User', userSchema);
+
+* Backend/package.json
+<!-- end list -->
+{
+"name": "BeautyPassBackend",
+"version": "1.0.0",
+"description": "Backend for BeautyPass app",
+"main": "app.js",
+"scripts": {
+"start": "node app.js",
+"dev": "nodemon app.js", // Si usas nodemon
+"test": "echo \"Error: no test specified\" && exit 1"
+},
+"dependencies": {
+"express": "^4.18.2", // Reemplaza con la versión actual
+"cors": "^2.8.5", // Reemplaza con la versión actual
+"mongoose": "^6.8.0" // Reemplaza con la versión actual
+// ... Otras dependencias
+},
+"devDependencies": {
+"nodemon": "^2.0.20" // Reemplaza con la versión actual (si lo usas)
+}
+}
